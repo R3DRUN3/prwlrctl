@@ -1,0 +1,203 @@
+name: ci
+
+on:
+  push:
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "LICENSE"
+      - "LICENSE.*"
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Regular CI
+  # ---------------------------------------------------------------------------
+  test:
+    name: Lint and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Check formatting
+        run: |
+          files="$(gofmt -l .)"
+
+          if [ -n "$files" ]; then
+            echo "The following files are not formatted:"
+            echo "$files"
+            echo
+            echo "Run 'make fmt' locally."
+            exit 1
+          fi
+
+      - name: Lint
+        run: make lint
+
+      - name: Test
+        run: make test
+
+  # ---------------------------------------------------------------------------
+  # Release binaries
+  # Runs only for version tags such as v0.1.0
+  # ---------------------------------------------------------------------------
+  release-binaries:
+    name: Build ${{ matrix.goos }}/${{ matrix.goarch }}
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+
+          - goos: linux
+            goarch: arm64
+
+          - goos: darwin
+            goarch: amd64
+
+          - goos: darwin
+            goarch: arm64
+
+          - goos: windows
+            goarch: amd64
+
+          - goos: windows
+            goarch: arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: make build
+
+      - name: Package
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          NAME="prwlrctl-${VERSION}-${{ matrix.goos }}-${{ matrix.goarch }}"
+
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            mv bin/prwlrctl bin/prwlrctl.exe
+            tar -C bin -czf "${NAME}.tar.gz" prwlrctl.exe
+          else
+            tar -C bin -czf "${NAME}.tar.gz" prwlrctl
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: prwlrctl-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: prwlrctl-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+
+  # ---------------------------------------------------------------------------
+  # GitHub Release
+  # ---------------------------------------------------------------------------
+  release:
+    name: Create GitHub Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: release-binaries
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download release artifacts
+        uses: actions/download-artifact@v5
+        with:
+          pattern: prwlrctl-*
+          path: dist
+          merge-multiple: true
+
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: dist/*.tar.gz
+
+  # ---------------------------------------------------------------------------
+  # Docker / GHCR
+  # Runs only for version tags such as v0.1.0
+  # ---------------------------------------------------------------------------
+  container:
+    name: Publish container
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
