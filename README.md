@@ -75,6 +75,7 @@ prwlrctl providers get <provider-id>
 prwlrctl scans list --state completed
 prwlrctl scans launch --provider <provider-id> --name "weekly scan"
 prwlrctl scans get <scan-id>
+prwlrctl scans compliance-overview <scan-id>
 
 prwlrctl findings list --scan <scan-id> --severity critical
 ```  
