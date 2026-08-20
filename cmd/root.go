@@ -37,7 +37,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&flagAPIKey, "api-key", "", "Prowler API key (env PRWLRCTL_API_KEY)")
 	rootCmd.PersistentFlags().StringVar(&flagToken, "token", "", "JWT access token, overrides API key (env PRWLRCTL_TOKEN)")
 	rootCmd.PersistentFlags().StringVarP(&flagOutput, "output", "o", "table", "Output format: table|json")
-	rootCmd.PersistentFlags().DurationVar(&flagTimeout, "timeout", 15*time.Second, "Per-request timeout")
+	rootCmd.PersistentFlags().DurationVar(&flagTimeout, "timeout", 30*time.Second, "Per-request timeout")
 
 	rootCmd.AddCommand(configureCmd, authCmd, providersCmd, scansCmd, findingsCmd)
 }
