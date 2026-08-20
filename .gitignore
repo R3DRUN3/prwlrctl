@@ -4,6 +4,9 @@
 # build
 bin
 
+# logs
+logs.json
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
