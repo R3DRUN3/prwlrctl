@@ -1,21 +1,43 @@
 # prwlrctl  
 
-[![ci](https://github.com/R3DRUN3/prwlrctl/actions/workflows/ci.yml/badge.svg)](https://github.com/R3DRUN3/prwlrctl/actions/workflows/ci.yml) [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/) [![Latest Release](https://img.shields.io/github/v/release/r3drun3/prwlrctl?logo=github)](https://github.com/r3drun3/prwlrctl/releases/latest)  
+[![ci](https://github.com/R3DRUN3/prwlrctl/actions/workflows/ci.yml/badge.svg)](https://github.com/R3DRUN3/prwlrctl/actions/workflows/ci.yml) [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)  
+[![Latest Release](https://img.shields.io/github/v/release/r3drun3/prwlrctl?logo=github)](https://github.com/r3drun3/prwlrctl/releases/latest)  [![Go](https://img.shields.io/github/go-mod/go-version/R3DRUN3/prwlrctl?logo=go)](https://github.com/R3DRUN3/prwlrctl/blob/main/go.mod)  
 
 <img src="./media/logo.png" alt="logo" width="250"/>
 
 Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app)'s API.  
-Built for both interactive operators and automations.    
+Built for both human and non human operators.     
 
 Prowler API docs can be found [here](https://api.prowler.com/api/v1/docs).  
 
-## Install
+## Run  
+You have many options to retrieve and run the cli:  
 
-    go install github.com/r3drun3/prwlrctl@latest  
-
-or build locally:
-
+- clone the repo and build locally:  
+    ```bash
     make build   # produces ./bin/prwlrctl
+    ```  
+- retrieve the [release](https://github.com/R3DRUN3/prwlrctl/releases) you want 
+
+- download the [docker image](https://github.com/R3DRUN3/prwlrctl/pkgs/container/prwlrctl).  
+
+### Run with Docker
+For example, if you want to launch the CLI via docker on the same machine as the Prowler server, first define a `.env` file:  
+```txt
+PRWLRCTL_BASE_URL=http://localhost:8080/api/v1
+PRWLRCTL_API_KEY=pk_YOURKEY
+```  
+
+Then launch the container:  
+```bash
+docker run --rm \
+--network host \
+--env-file path-to-your-.env-file \
+ghcr.io/r3drun3/prwlrctl:0.1.0 \
+providers list -o json
+```  
+
+
 
 ## Authentication
 
@@ -54,21 +76,7 @@ Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:
     prwlrctl scans get "$scan_id" -o json | jq .
 
 
-## Run with Docker
-For example, if you want to launch the CLI via docker on the same machine as the Prowler server, first define a `.env` file:  
-```txt
-PRWLRCTL_BASE_URL=http://localhost:8080/api/v1
-PRWLRCTL_API_KEY=pk_YOURKEY
-```  
 
-Then launch the container:  
-```bash
-docker run --rm \
---network host \
---env-file .env \
-prwlrctl:test \
-providers list -o json
-```  
 
 ## Exit codes
 
