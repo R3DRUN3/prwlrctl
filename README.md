@@ -5,8 +5,8 @@
 
 <img src="./media/logo.png" alt="logo" width="250"/>
 
-Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app)'s API.  
-Built for both human and non human operators.  
+Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app) API.  
+Built for both human and non-human operators.  
 
 > [!TIP]
 > This tool is mainly intended to streamline management and data retrieval for self-hosted instances of Prowler Server.  
@@ -38,7 +38,7 @@ Then launch the container:
 docker run --rm \
 --network host \
 --env-file path-to-your-.env-file \
-ghcr.io/r3drun3/prwlrctl:0.1.2 \
+ghcr.io/r3drun3/prwlrctl:0.1.3 \
 providers list -o json
 ```  
 
