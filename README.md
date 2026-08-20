@@ -6,9 +6,13 @@
 <img src="./media/logo.png" alt="logo" width="250"/>
 
 Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app)'s API.  
-Built for both human and non human operators.     
+Built for both human and non human operators.  
 
-Prowler API docs can be found [here](https://api.prowler.com/api/v1/docs).  
+> [!TIP]
+> This tool is mainly intended to streamline management operations on self-hosted instances of Prowler Server.  
+> The API docs for your self-hosted Prowler Server can be found at `http://localhost:8080/api/v1/docs`.  
+
+
 
 ## Run  
 You have many options to retrieve and run the cli:  
