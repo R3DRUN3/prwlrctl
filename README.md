@@ -78,6 +78,7 @@ prwlrctl scans get <scan-id>
 prwlrctl scans compliance-overview <scan-id>
 
 prwlrctl findings list --scan <scan-id> --severity critical
+prwlrctl findings get <finding-id>
 ```  
 
 
