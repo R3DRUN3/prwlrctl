@@ -58,16 +58,20 @@ Or persist settings once:
 
     prwlrctl configure --base-url https://your-host/api/v1 --api-key pk_xxx
 
-## Usage
+## Usage Examples
 
-    prwlrctl providers list
-    prwlrctl providers get <provider-id>
+```bash
+prwlrctl help
+prwlrctl providers list
+prwlrctl providers get <provider-id>
 
-    prwlrctl scans list --state executing
-    prwlrctl scans launch --provider <provider-id> --name "weekly scan" --wait
-    prwlrctl scans get <scan-id>
+prwlrctl scans list --state completed
+prwlrctl scans launch --provider <provider-id> --name "weekly scan"
+prwlrctl scans get <scan-id>
 
-    prwlrctl findings list --scan <scan-id> --severity critical
+prwlrctl findings list --scan <scan-id> --severity critical
+```  
+
 
 Add `-o json` to any command for machine-readable output (pipe into `jq`).
 Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:
