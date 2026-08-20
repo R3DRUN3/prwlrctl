@@ -2,7 +2,7 @@
 
 <img src="./media/logo.png" alt="logo" width="250"/>
 
-A small, fast Go CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app)'s API.  
+Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app)'s API.  
 Built for both interactive operators and automations.    
 
 Prowler API docs can be found [here](https://api.prowler.com/api/v1/docs).  

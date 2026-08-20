@@ -1,18 +1,34 @@
 BINARY := prwlrctl
+BUILD_DIR := bin
 
-.PHONY: build test lint fmt install
+GO := go
+GOFLAGS := -trimpath -buildvcs=false
+LDFLAGS := -s -w -buildid=
+
+.PHONY: build test lint fmt install clean
 
 build:
-	go build -trimpath -ldflags="-s -w" -o bin/$(BINARY) .
+	mkdir -p $(BUILD_DIR)
+	CGO_ENABLED=0 $(GO) build \
+		$(GOFLAGS) \
+		-ldflags="$(LDFLAGS)" \
+		-tags="netgo osusergo" \
+		-o $(BUILD_DIR)/$(BINARY) .
 
 install:
-	go install .
+	CGO_ENABLED=0 $(GO) install \
+		$(GOFLAGS) \
+		-ldflags="$(LDFLAGS)" \
+		-tags="netgo osusergo" .
 
 test:
-	go test ./...
-
-fmt:
-	gofmt -l -w .
+	$(GO) test ./...
 
 lint:
-	go vet ./...
+	$(GO) vet ./...
+
+fmt:
+	$(GO) fmt ./...
+
+clean:
+	rm -rf $(BUILD_DIR)
