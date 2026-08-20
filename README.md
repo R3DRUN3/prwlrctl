@@ -22,7 +22,7 @@ You have many options to retrieve and run the cli:
 - download the [docker image](https://github.com/R3DRUN3/prwlrctl/pkgs/container/prwlrctl).  
 
 - clone the repo and build locally:  
-    ```bash
+    ```console
     make build   # produces ./bin/prwlrctl
     ```  
 
@@ -34,11 +34,11 @@ PRWLRCTL_API_KEY=pk_YOURKEY
 ```  
 
 Then launch the container:  
-```bash
+```console
 docker run --rm \
 --network host \
 --env-file path-to-your-.env-file \
-ghcr.io/r3drun3/prwlrctl:0.1.3 \
+ghcr.io/r3drun3/prwlrctl:0.2.0 \
 providers list -o json
 ```  
 
@@ -65,7 +65,7 @@ Or persist settings once:
 
 ## Usage Examples
 
-```bash
+```console
 prwlrctl --version
 prwlrctl help
 prwlrctl health
