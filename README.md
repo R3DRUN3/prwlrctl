@@ -87,3 +87,51 @@ Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:
 
 Non-zero exit on any API or network error: safe to rely on in cron/CI
 (`&&`/`||` chaining, `set -e`, etc.).
+
+
+## Local development
+In order to develop and debug the code locally I suggest using vscode.  
+Create the `.vscode/launch.json` file and add your debug configurations, like this:  
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug prwlrctl --version",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/main.go",
+      "args": ["--version"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug prwlrctl providers list",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/main.go",
+      "args": ["providers", "list", "--all"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PRWLRCTL_BASE_URL": "http://localhost:8080/api/v1",
+        "PRWLRCTL_API_KEY": "pk_YOUR-PROWLER-SERVER-API-KEY-HERE"
+      }
+    },
+    {
+      "name": "Debug prwlrctl scans list",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/main.go",
+      "args": ["scans", "list"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PRWLRCTL_BASE_URL": "http://localhost:8080/api/v1",
+        "PRWLRCTL_API_KEY": "pk_YOUR-PROWLER-SERVER-API-KEY-HERE"
+      }
+    }
+  ]
+}
+
+```
