@@ -51,6 +51,23 @@ Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:
     scan_id=$(prwlrctl scans launch --provider "$PROVIDER_ID" -q)
     prwlrctl scans get "$scan_id" -o json | jq .
 
+
+## Run with Docker
+For example, if you want to launch the CLI via docker on the same machine as the Prowler server, first define a `.env` file:  
+```txt
+PRWLRCTL_BASE_URL=http://localhost:8080/api/v1
+PRWLRCTL_API_KEY=pk_YOURKEY
+```  
+
+Then launch the container:  
+```bash
+docker run --rm \
+--network host \
+--env-file .env \
+prwlrctl:test \
+providers list -o json
+```  
+
 ## Exit codes
 
 Non-zero exit on any API or network error: safe to rely on in cron/CI
