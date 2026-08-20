@@ -9,7 +9,7 @@ Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started
 Built for both human and non human operators.  
 
 > [!TIP]
-> This tool is mainly intended to streamline management operations on self-hosted instances of Prowler Server.  
+> This tool is mainly intended to streamline management and data retrieval for self-hosted instances of Prowler Server.  
 > The API docs for your self-hosted Prowler Server can be found at `http://localhost:8080/api/v1/docs`.  
 
 
