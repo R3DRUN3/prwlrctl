@@ -103,6 +103,48 @@ var scansGetCmd = &cobra.Command{
 	},
 }
 
+var scansComplianceOverviewCmd = &cobra.Command{
+	Use:   "compliance-overview <scan-id>",
+	Short: "Show compliance overview for a scan",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ctx, cancel := cmdContext()
+		defer cancel()
+
+		c := newClient()
+		doc, err := c.GetComplianceOverviews(ctx, args[0])
+		if err != nil {
+			return err
+		}
+
+		if flagOutput == string(output.JSON) {
+			return output.JSONPretty(os.Stdout, doc)
+		}
+
+		resources, err := doc.Many()
+		if err != nil {
+			return fmt.Errorf("decoding compliance overviews: %w", err)
+		}
+
+		output.RenderTable(
+			os.Stdout,
+			resources,
+			complianceOverviewColumns,
+		)
+
+		return nil
+	},
+}
+
+var complianceOverviewColumns = []output.Column{
+	output.Attr("FRAMEWORK", "framework"),
+	output.Attr("VERSION", "version"),
+	output.AttrAny("PASSED", "requirements_passed"),
+	output.AttrAny("FAILED", "requirements_failed"),
+	output.AttrAny("MANUAL", "requirements_manual"),
+	output.AttrAny("TOTAL", "total_requirements"),
+}
+
 var (
 	scanCreateProvider string
 	scanCreateName     string
@@ -200,5 +242,10 @@ func init() {
 	scansLaunchCmd.Flags().BoolVar(&scanCreateWait, "wait", false, "Block until the scan reaches a terminal state")
 	scansLaunchCmd.Flags().BoolVarP(&scanCreateQuiet, "quiet", "q", false, "Print only the new scan ID (for scripting)")
 
-	scansCmd.AddCommand(scansListCmd, scansGetCmd, scansLaunchCmd)
+	scansCmd.AddCommand(
+		scansListCmd,
+		scansGetCmd,
+		scansComplianceOverviewCmd,
+		scansLaunchCmd,
+	)
 }

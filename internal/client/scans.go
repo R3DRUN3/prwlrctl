@@ -24,6 +24,17 @@ func (c *Client) GetScan(ctx context.Context, id string) (jsonapi.Document, erro
 	return doc, err
 }
 
+// GetComplianceOverviews returns the compliance overview for all frameworks
+// associated with a scan.
+func (c *Client) GetComplianceOverviews(ctx context.Context, scanID string) (jsonapi.Document, error) {
+	q := url.Values{}
+	q.Set("filter[scan_id]", scanID)
+
+	var doc jsonapi.Document
+	err := c.Do(ctx, "GET", "/compliance-overviews", q, nil, &doc)
+	return doc, err
+}
+
 // CreateScan launches a new scan against a provider. Prowler responds with
 // the asynchronous task resource; the actual scan resource is created shortly
 // afterwards.

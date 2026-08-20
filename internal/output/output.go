@@ -24,6 +24,7 @@ const (
 // read each cell from a resource.
 func RenderTable(w io.Writer, resources []jsonapi.Resource, columns []Column) {
 	tw := tabwriter.NewWriter(w, 0, 2, 2, ' ', 0)
+
 	headers := make([]string, len(columns))
 	for i, c := range columns {
 		headers[i] = c.Header
@@ -37,6 +38,7 @@ func RenderTable(w io.Writer, resources []jsonapi.Resource, columns []Column) {
 		}
 		fmt.Fprintln(tw, strings.Join(row, "\t"))
 	}
+
 	tw.Flush()
 }
 
@@ -48,31 +50,82 @@ type Column struct {
 // Attr returns a Column that reads a plain string attribute, defaulting to
 // "-" when absent, so partial/evolving schemas never crash rendering.
 func Attr(header, key string) Column {
-	return Column{Header: header, Value: func(r jsonapi.Resource) string {
-		if v := r.Str(key); v != "" {
-			return v
-		}
-		return "-"
-	}}
+	return Column{
+		Header: header,
+		Value: func(r jsonapi.Resource) string {
+			if v := r.Str(key); v != "" {
+				return v
+			}
+			return "-"
+		},
+	}
+}
+
+// AttrAny returns a Column that renders any JSON attribute value as a string.
+// It supports strings, numbers, booleans, and other JSON values.
+func AttrAny(header, key string) Column {
+	return Column{
+		Header: header,
+		Value: func(r jsonapi.Resource) string {
+			v := r.Any(key)
+			if v == nil {
+				return "-"
+			}
+
+			switch value := v.(type) {
+			case string:
+				if value == "" {
+					return "-"
+				}
+				return value
+			case float64:
+				return formatNumber(value)
+			case bool:
+				return fmt.Sprintf("%t", value)
+			default:
+				return fmt.Sprintf("%v", value)
+			}
+		},
+	}
+}
+
+// formatNumber renders JSON numbers without an unnecessary decimal portion.
+// For example, 37.0 becomes "37", while 37.5 remains "37.5".
+func formatNumber(value float64) string {
+	if value == float64(int64(value)) {
+		return fmt.Sprintf("%d", int64(value))
+	}
+
+	return fmt.Sprintf("%g", value)
 }
 
 // NestedBoolStatus reads a nested boolean attribute (e.g. connection.connected)
 // and renders it as trueLabel/falseLabel, or "-" if the field is absent.
 func NestedBoolStatus(header, parentKey, childKey, trueLabel, falseLabel string) Column {
-	return Column{Header: header, Value: func(r jsonapi.Resource) string {
-		v, ok := r.NestedBool(parentKey, childKey)
-		if !ok {
-			return "-"
-		}
-		if v {
-			return trueLabel
-		}
-		return falseLabel
-	}}
+	return Column{
+		Header: header,
+		Value: func(r jsonapi.Resource) string {
+			v, ok := r.NestedBool(parentKey, childKey)
+			if !ok {
+				return "-"
+			}
+
+			if v {
+				return trueLabel
+			}
+
+			return falseLabel
+		},
+	}
 }
 
 func IDColumn() Column {
-	return Column{Header: "ID", Value: func(r jsonapi.Resource) string { return r.ID }}
+	return Column{
+		Header: "ID",
+		Value: func(r jsonapi.Resource) string {
+			return r.ID
+		},
+	}
 }
 
 // JSONPretty prints any JSON-marshalable value as indented JSON. Works for
