@@ -22,7 +22,7 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:           "prwlrctl",
-	Short:         "Talk to the Prowler App API",
+	Short:         "Talk to the Prowler Server API",
 	SilenceUsage:  true,
 	SilenceErrors: false,
 }
