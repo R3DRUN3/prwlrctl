@@ -121,31 +121,37 @@ cron jobs that need a final exit code.`,
 		if scanCreateProvider == "" {
 			return fmt.Errorf("--provider is required")
 		}
+
 		ctx, cancel := cmdContext()
 		defer cancel()
 
 		c := newClient()
-		doc, err := c.CreateScan(ctx, scanCreateProvider, scanCreateName)
-		if err != nil {
-			return err
-		}
-		res, err := doc.One()
+
+		scanID, err := c.CreateScanAndGetID(
+			ctx,
+			scanCreateProvider,
+			scanCreateName,
+		)
 		if err != nil {
 			return err
 		}
 
 		if scanCreateWait {
-			return waitForScan(c, res.ID)
+			return waitForScan(c, scanID)
 		}
 
 		if scanCreateQuiet {
-			fmt.Println(res.ID)
+			fmt.Println(scanID)
 			return nil
 		}
+
 		if flagOutput == string(output.JSON) {
-			return output.JSONPretty(os.Stdout, doc)
+			return output.JSONPretty(os.Stdout, map[string]any{
+				"id": scanID,
+			})
 		}
-		fmt.Printf("Scan launched: id=%s state=%s\n", res.ID, res.Str("state"))
+
+		fmt.Printf("Scan launched: id=%s\n", scanID)
 		return nil
 	},
 }
