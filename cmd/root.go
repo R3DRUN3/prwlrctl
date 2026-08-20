@@ -25,6 +25,7 @@ var rootCmd = &cobra.Command{
 	Short:         "Talk to the Prowler Server API",
 	SilenceUsage:  true,
 	SilenceErrors: false,
+	Version:       version,
 }
 
 func Execute() error {

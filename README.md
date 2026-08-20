@@ -33,7 +33,7 @@ Then launch the container:
 docker run --rm \
 --network host \
 --env-file path-to-your-.env-file \
-ghcr.io/r3drun3/prwlrctl:0.1.0 \
+ghcr.io/r3drun3/prwlrctl:0.1.1 \
 providers list -o json
 ```  
 
@@ -62,6 +62,7 @@ Or persist settings once:
 
 ```bash
 prwlrctl help
+prwlrctl --version
 prwlrctl providers list
 prwlrctl providers get <provider-id>
 
