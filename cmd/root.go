@@ -42,7 +42,14 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&flagOutput, "output", "o", "table", "Output format: table|json")
 	rootCmd.PersistentFlags().DurationVar(&flagTimeout, "timeout", 60*time.Second, "Per-request timeout")
 
-	rootCmd.AddCommand(configureCmd, authCmd, providersCmd, scansCmd, findingsCmd)
+	rootCmd.AddCommand(
+		configureCmd,
+		authCmd,
+		providersCmd,
+		scansCmd,
+		findingsCmd,
+		resourcesCmd,
+	)
 }
 
 // newClient resolves config precedence (flags > env > file) and builds a
