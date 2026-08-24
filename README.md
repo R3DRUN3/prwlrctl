@@ -40,7 +40,7 @@ Then launch the container:
 docker run --rm \
 --network host \
 --env-file path-to-your-.env-file \
-ghcr.io/r3drun3/prwlrctl:0.2.2 \
+ghcr.io/r3drun3/prwlrctl:0.3.0 \
 providers list -o json
 ```  
 
@@ -83,6 +83,7 @@ prwlrctl scans compliance-overview <scan-id>
 
 prwlrctl findings list --scan <scan-id> --severity critical
 prwlrctl findings get <finding-id>
+prwlcrctl resources get <resource-id>
 ```  
 
 
