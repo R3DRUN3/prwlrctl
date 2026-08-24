@@ -32,8 +32,6 @@ var findingColumns = []output.Column{
 	output.Attr("CHECK", "check_id"),
 	output.Attr("SEVERITY", "severity"),
 	output.Attr("STATUS", "status"),
-	output.Attr("REGION", "region"),
-	output.Attr("RESOURCE", "resource_uid"),
 }
 
 var findingsListCmd = &cobra.Command{
@@ -41,7 +39,7 @@ var findingsListCmd = &cobra.Command{
 	Short: "List findings, optionally filtered by scan/severity/status",
 	Long: `Prowler requires at least one date filter on findings (to avoid
 unbounded queries). This command always sends filter[updated_at.gte],
-computed as now - --since (default 24h). Widen --since for older results.`,
+computed as now - --since (default 7 days). Widen --since for older results.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx, cancel := cmdContext()
 		defer cancel()
@@ -247,7 +245,7 @@ func init() {
 	findingsListCmd.Flags().StringVar(&findingProvider, "provider", "", "Filter by provider ID")
 	findingsListCmd.Flags().StringVar(&findingSeverity, "severity", "", "Filter by severity (critical|high|medium|low|informational)")
 	findingsListCmd.Flags().StringVar(&findingStatus, "status", "", "Filter by status (PASS|FAIL|MANUAL)")
-	findingsListCmd.Flags().DurationVar(&findingSince, "since", 24*time.Hour, "Only findings updated within this duration (Prowler requires a date filter)")
+	findingsListCmd.Flags().DurationVar(&findingSince, "since", 7*24*time.Hour, "Only findings updated within this duration (Prowler requires a date filter)")
 	findingsListCmd.Flags().IntVar(&findingPage, "page", 0, "Page number")
 	findingsListCmd.Flags().IntVar(&findingPageSize, "size", 0, "Page size")
 	findingsListCmd.Flags().BoolVar(&findingAll, "all", false, "Fetch every page of results")
