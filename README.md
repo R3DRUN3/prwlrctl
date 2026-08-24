@@ -89,13 +89,6 @@ Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:
 
 
 
-
-## Exit codes
-
-Non-zero exit on any API or network error: safe to rely on in cron/CI
-(`&&`/`||` chaining, `set -e`, etc.).
-
-
 ## Local development
 In order to develop and debug the code locally I suggest using vscode.  
 Create the `.vscode/launch.json` file and add your debug configurations, like this:  
