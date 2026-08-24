@@ -45,6 +45,7 @@ computed as now - --since (default 7 days). Widen --since for older results.`,
 		defer cancel()
 
 		c := newClient()
+
 		filters := map[string]string{
 			"scan":           findingScan,
 			"provider":       findingProvider,
@@ -54,12 +55,17 @@ computed as now - --since (default 7 days). Widen --since for older results.`,
 		}
 
 		if findingAll {
-			if filters["scan"] == "" &&
+			if flagOutput != string(output.JSON) &&
+				filters["scan"] == "" &&
 				filters["provider"] == "" &&
 				filters["severity"] == "" &&
 				filters["status"] == "" {
-				fmt.Println("Retrieving all scans without filters, please consider filtering to reduce response time and load")
+				fmt.Fprintln(
+					os.Stderr,
+					"Warning: retrieving all scans without filters; consider filtering to reduce response time and load",
+				)
 			}
+
 			resources, err := c.ListAll(ctx, "/findings", client.BuildQuery(filters))
 			if err != nil {
 				return err
@@ -247,14 +253,61 @@ func printAnyField(values map[string]any, key, label string) {
 }
 
 func init() {
-	findingsListCmd.Flags().StringVar(&findingScan, "scan", "", "Filter by scan ID")
-	findingsListCmd.Flags().StringVar(&findingProvider, "provider", "", "Filter by provider ID")
-	findingsListCmd.Flags().StringVar(&findingSeverity, "severity", "", "Filter by severity (critical|high|medium|low|informational)")
-	findingsListCmd.Flags().StringVar(&findingStatus, "status", "", "Filter by status (PASS|FAIL|MANUAL)")
-	findingsListCmd.Flags().DurationVar(&findingSince, "since", 7*24*time.Hour, "Only findings updated within this duration (Prowler requires a date filter)")
-	findingsListCmd.Flags().IntVar(&findingPage, "page", 0, "Page number")
-	findingsListCmd.Flags().IntVar(&findingPageSize, "size", 0, "Page size")
-	findingsListCmd.Flags().BoolVar(&findingAll, "all", false, "Fetch every page of results")
+	findingsListCmd.Flags().StringVar(
+		&findingScan,
+		"scan",
+		"",
+		"Filter by scan ID",
+	)
+
+	findingsListCmd.Flags().StringVar(
+		&findingProvider,
+		"provider",
+		"",
+		"Filter by provider ID",
+	)
+
+	findingsListCmd.Flags().StringVar(
+		&findingSeverity,
+		"severity",
+		"",
+		"Filter by severity (critical|high|medium|low|informational)",
+	)
+
+	findingsListCmd.Flags().StringVar(
+		&findingStatus,
+		"status",
+		"",
+		"Filter by status (PASS|FAIL|MANUAL)",
+	)
+
+	findingsListCmd.Flags().DurationVar(
+		&findingSince,
+		"since",
+		7*24*time.Hour,
+		"Only findings updated within this duration (Prowler requires a date filter)",
+	)
+
+	findingsListCmd.Flags().IntVar(
+		&findingPage,
+		"page",
+		0,
+		"Page number",
+	)
+
+	findingsListCmd.Flags().IntVar(
+		&findingPageSize,
+		"size",
+		0,
+		"Page size",
+	)
+
+	findingsListCmd.Flags().BoolVar(
+		&findingAll,
+		"all",
+		false,
+		"Fetch every page of results",
+	)
 
 	findingsCmd.AddCommand(findingsListCmd, findingsGetCmd)
 }
