@@ -3,7 +3,10 @@
 [![ci](https://github.com/R3DRUN3/prwlrctl/actions/workflows/ci.yml/badge.svg)](https://github.com/R3DRUN3/prwlrctl/actions/workflows/ci.yml) [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)  
 [![Latest Release](https://img.shields.io/github/v/release/r3drun3/prwlrctl?logo=github)](https://github.com/r3drun3/prwlrctl/releases/latest)  [![Go](https://img.shields.io/github/go-mod/go-version/R3DRUN3/prwlrctl?logo=go)](https://github.com/R3DRUN3/prwlrctl/blob/main/go.mod)  
 
-<img src="./media/logo.png" alt="logo" width="250"/>
+<img src="./media/logo_2.png" alt="logo" width="250"/>  
+</br>
+</br>
+
 
 Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app) API.  
 Built for both human and non-human operators.  
