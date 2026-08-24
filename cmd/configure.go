@@ -12,7 +12,7 @@ var configureCmd = &cobra.Command{
 	Short: "Save a base URL and API key to the local config file",
 	Long: `Persists settings to ~/.config/prwlrctl/config.json so you don't need to
 pass --base-url/--api-key on every call. For services and cron jobs, prefer
-the PRWLRCTL_API_KEY / PRWLRCTL_BASE_URL environment variables instead of a
+the PROWLER_API_KEY / PROWLER_BASE_URL environment variables instead of a
 config file on disk.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if flagBaseURL == "" && flagAPIKey == "" {

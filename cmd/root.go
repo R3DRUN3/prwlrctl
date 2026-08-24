@@ -36,9 +36,9 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&flagBaseURL, "base-url", "", "Prowler API base URL (env PRWLRCTL_BASE_URL, default "+config.DefaultBase+")")
-	rootCmd.PersistentFlags().StringVar(&flagAPIKey, "api-key", "", "Prowler API key (env PRWLRCTL_API_KEY)")
-	rootCmd.PersistentFlags().StringVar(&flagToken, "token", "", "JWT access token, overrides API key (env PRWLRCTL_TOKEN)")
+	rootCmd.PersistentFlags().StringVar(&flagBaseURL, "base-url", "", "Prowler API base URL (env PROWLER_BASE_URL, default "+config.DefaultBase+")")
+	rootCmd.PersistentFlags().StringVar(&flagAPIKey, "api-key", "", "Prowler API key (env PROWLER_API_KEY)")
+	rootCmd.PersistentFlags().StringVar(&flagToken, "token", "", "JWT access token, overrides API key (env PROWLER_TOKEN)")
 	rootCmd.PersistentFlags().StringVarP(&flagOutput, "output", "o", "table", "Output format: table|json")
 	rootCmd.PersistentFlags().DurationVar(&flagTimeout, "timeout", 30*time.Second, "Per-request timeout")
 

@@ -31,8 +31,8 @@ You have many options to retrieve and run the cli:
 ### Run with Docker
 If you want to launch the CLI via docker on the same machine as the Prowler server, first define a `.env` file:  
 ```console
-PRWLRCTL_BASE_URL=http://localhost:8080/api/v1
-PRWLRCTL_API_KEY=pk_YOURKEY
+PROWLER_BASE_URL=http://localhost:8080/api/v1
+PROWLER_API_KEY=pk_YOURKEY
 ```  
 
 Then launch the container:  
@@ -52,8 +52,8 @@ Two options, resolved with priority flags > env vars > config file:
 
 - **API key** (recommended): create one in the Prowler UI, then:
     ```console
-    export PRWLRCTL_API_KEY="pk_xxx"
-    export PRWLRCTL_BASE_URL="https://api.prowler.com/api/v1"
+    export PROWLER_API_KEY="pk_xxx"
+    export PROWLER_BASE_URL="https://api.prowler.com/api/v1"
     ```  
 
 - **JWT login**:  
@@ -121,8 +121,8 @@ Create the `.vscode/launch.json` file and add your debug configurations, like th
       "args": ["providers", "list", "--all"],
       "cwd": "${workspaceFolder}",
       "env": {
-        "PRWLRCTL_BASE_URL": "http://localhost:8080/api/v1",
-        "PRWLRCTL_API_KEY": "pk_YOUR-PROWLER-SERVER-API-KEY-HERE"
+        "PROWLER_BASE_URL": "http://localhost:8080/api/v1",
+        "PROWLER_API_KEY": "pk_YOUR-PROWLER-SERVER-API-KEY-HERE"
       }
     },
     {
@@ -134,8 +134,8 @@ Create the `.vscode/launch.json` file and add your debug configurations, like th
       "args": ["scans", "list"],
       "cwd": "${workspaceFolder}",
       "env": {
-        "PRWLRCTL_BASE_URL": "http://localhost:8080/api/v1",
-        "PRWLRCTL_API_KEY": "pk_YOUR-PROWLER-SERVER-API-KEY-HERE"
+        "PROWLER_BASE_URL": "http://localhost:8080/api/v1",
+        "PROWLER_API_KEY": "pk_YOUR-PROWLER-SERVER-API-KEY-HERE"
       }
     }
   ]

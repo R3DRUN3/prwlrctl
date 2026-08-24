@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	EnvBaseURL  = "PRWLRCTL_BASE_URL"
-	EnvAPIKey   = "PRWLRCTL_API_KEY"
-	EnvToken    = "PRWLRCTL_TOKEN" // JWT access token, takes precedence over API key
+	EnvBaseURL  = "PROWLER_BASE_URL"
+	EnvAPIKey   = "PROWLER_API_KEY"
+	EnvToken    = "PROWLER_TOKEN" // JWT access token, takes precedence over API key
 	DefaultBase = "https://api.prowler.com/api/v1"
 )
 
