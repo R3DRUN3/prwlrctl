@@ -51,16 +51,16 @@ providers list -o json
 Two options, resolved with priority flags > env vars > config file:
 
 - **API key** (recommended): create one in the Prowler UI, then:
-      ```console
-      export PRWLRCTL_API_KEY="pk_xxx"
-      export PRWLRCTL_BASE_URL="https://api.prowler.com/api/v1"
-      ```  
+    ```console
+    export PRWLRCTL_API_KEY="pk_xxx"
+    export PRWLRCTL_BASE_URL="https://api.prowler.com/api/v1"
+    ```  
 
-- **JWT login**:
-      ```console
-      prwlrctl auth login --email you@example.com --password '...'
-      prwlrctl auth refresh   # when the access token expires
-      ```  
+- **JWT login**:  
+    ```console
+    prwlrctl auth login --email you@example.com --password '...'
+    prwlrctl auth refresh   # when the access token expires
+    ```  
 
 Or persist settings once:
 ```console
