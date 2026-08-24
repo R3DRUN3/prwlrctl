@@ -30,7 +30,7 @@ You have many options to retrieve and run the cli:
 
 ### Run with Docker
 If you want to launch the CLI via docker on the same machine as the Prowler server, first define a `.env` file:  
-```txt
+```console
 PRWLRCTL_BASE_URL=http://localhost:8080/api/v1
 PRWLRCTL_API_KEY=pk_YOURKEY
 ```  
@@ -51,18 +51,21 @@ providers list -o json
 Two options, resolved with priority flags > env vars > config file:
 
 - **API key** (recommended): create one in the Prowler UI, then:
-
+      ```console
       export PRWLRCTL_API_KEY="pk_xxx"
       export PRWLRCTL_BASE_URL="https://api.prowler.com/api/v1"
+      ```  
 
 - **JWT login**:
-
+      ``console
       prwlrctl auth login --email you@example.com --password '...'
       prwlrctl auth refresh   # when the access token expires
+      ```  
 
 Or persist settings once:
-
+    ``console
     prwlrctl configure --base-url https://your-host/api/v1 --api-key pk_xxx
+    ```  
 
 ## Usage Examples
 
