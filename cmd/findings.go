@@ -58,7 +58,7 @@ computed as now - --since (default 7 days). Widen --since for older results.`,
 				filters["provider"] == "" &&
 				filters["severity"] == "" &&
 				filters["status"] == "" {
-				fmt.Println("Retrieving all scans without filters, considering filtering to reduce response time and load")
+				fmt.Println("Retrieving all scans without filters, please consider filtering to reduce response time and load")
 			}
 			resources, err := c.ListAll(ctx, "/findings", client.BuildQuery(filters))
 			if err != nil {
