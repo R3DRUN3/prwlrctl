@@ -5,7 +5,6 @@
 
 <img src="./media/logo_2.png" alt="logo" width="250"/>  
 </br>
-</br>
 
 
 Unofficial CLI for the [Prowler Server](https://docs.prowler.com/getting-started/products/prowler-app) API.  
