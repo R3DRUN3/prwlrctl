@@ -57,15 +57,15 @@ Two options, resolved with priority flags > env vars > config file:
       ```  
 
 - **JWT login**:
-      ``console
+      ```console
       prwlrctl auth login --email you@example.com --password '...'
       prwlrctl auth refresh   # when the access token expires
       ```  
 
 Or persist settings once:
-    ``console
-    prwlrctl configure --base-url https://your-host/api/v1 --api-key pk_xxx
-    ```  
+```console
+prwlrctl configure --base-url https://your-host/api/v1 --api-key pk_xxx
+```  
 
 ## Usage Examples
 
@@ -87,10 +87,12 @@ prwlrctl findings get <finding-id>
 
 
 Add `-o json` to any command for machine-readable output (pipe into `jq`).
-Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:
+Add `-q` to `scans launch` to print just the new scan ID, handy for scripts:  
 
-    scan_id=$(prwlrctl scans launch --provider "$PROVIDER_ID" -q)
-    prwlrctl scans get "$scan_id" -o json | jq .
+```console
+scan_id=$(prwlrctl scans launch --provider "$PROVIDER_ID" -q)
+prwlrctl scans get "$scan_id" -o json | jq .  
+```  
 
 
 
