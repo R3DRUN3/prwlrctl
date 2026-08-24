@@ -38,7 +38,7 @@ Then launch the container:
 docker run --rm \
 --network host \
 --env-file path-to-your-.env-file \
-ghcr.io/r3drun3/prwlrctl:0.2.0 \
+ghcr.io/r3drun3/prwlrctl:0.2.1 \
 providers list -o json
 ```  
 
