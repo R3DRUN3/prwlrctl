@@ -1,4 +1,4 @@
-package client
+package prowler
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 )
 
 // ListScans lists scans, optionally filtered (e.g. filters["provider"] = id,

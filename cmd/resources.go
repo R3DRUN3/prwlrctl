@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
 	"github.com/r3drun3/prwlrctl/internal/output"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 	"github.com/spf13/cobra"
 )
 

@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/r3drun3/prwlrctl/internal/client"
 	"github.com/r3drun3/prwlrctl/internal/output"
+	prowler "github.com/r3drun3/prwlrctl/pkg/prowler"
 	"github.com/spf13/cobra"
 )
 
@@ -46,7 +46,7 @@ var scansListCmd = &cobra.Command{
 		}
 
 		if scanAll {
-			resources, err := c.ListAll(ctx, "/scans", client.BuildQuery(filters))
+			resources, err := c.ListAll(ctx, "/scans", prowler.BuildQuery(filters))
 			if err != nil {
 				return err
 			}
@@ -201,7 +201,7 @@ cron jobs that need a final exit code.`,
 // waitForScan polls GetScan until a terminal state is reached, returning a
 // non-nil error (and therefore non-zero exit code) on failure/cancellation,
 // which is what cron/CI callers rely on.
-func waitForScan(c *client.Client, scanID string) error {
+func waitForScan(c *prowler.Client, scanID string) error {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 

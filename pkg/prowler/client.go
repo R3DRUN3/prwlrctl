@@ -1,7 +1,7 @@
-// Package client is a small, dependency-free HTTP client for the Prowler
+// package prowler is a small, dependency-free HTTP client for the Prowler
 // JSON:API backend: auth headers, retries on 429/5xx, and JSON:API error
 // unwrapping into Go errors.
-package client
+package prowler
 
 import (
 	"bytes"
@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 )
 
 type Client struct {

@@ -1,9 +1,9 @@
-package client
+package prowler
 
 import (
 	"context"
 
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 )
 
 // Login exchanges email/password for a JWT access/refresh token pair via

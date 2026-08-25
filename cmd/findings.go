@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/r3drun3/prwlrctl/internal/client"
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
 	"github.com/r3drun3/prwlrctl/internal/output"
+	prowler "github.com/r3drun3/prwlrctl/pkg/prowler"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 	"github.com/spf13/cobra"
 )
 
@@ -66,7 +66,7 @@ computed as now - --since (default 7 days). Widen --since for older results.`,
 				)
 			}
 
-			resources, err := c.ListAll(ctx, "/findings", client.BuildQuery(filters))
+			resources, err := c.ListAll(ctx, "/findings", prowler.BuildQuery(filters))
 			if err != nil {
 				return err
 			}

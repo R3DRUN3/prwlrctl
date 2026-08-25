@@ -1,10 +1,10 @@
-package client
+package prowler
 
 import (
 	"context"
 	"net/url"
 
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 )
 
 // ListProviders returns cloud provider accounts/connections registered in
@@ -24,7 +24,7 @@ func (c *Client) GetProvider(ctx context.Context, id string) (jsonapi.Document, 
 }
 
 // BuildQuery turns filters into JSON:API filter[...] query params, with no
-// page/size params set. Pair with Client.ListAll, which follows the
+// page/size params set. Pair with prowler.ListAll, which follows the
 // server's "next" links instead of manual pagination.
 func BuildQuery(filters map[string]string) url.Values {
 	return buildListQuery(filters, 0, 0)

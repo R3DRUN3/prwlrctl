@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/r3drun3/prwlrctl/internal/client"
 	"github.com/r3drun3/prwlrctl/internal/output"
+	prowler "github.com/r3drun3/prwlrctl/pkg/prowler"
 	"github.com/spf13/cobra"
 )
 
@@ -40,7 +40,7 @@ var providersListCmd = &cobra.Command{
 		filters := map[string]string{"provider": providerFilterType}
 
 		if providerAll {
-			resources, err := c.ListAll(ctx, "/providers", client.BuildQuery(filters))
+			resources, err := c.ListAll(ctx, "/providers", prowler.BuildQuery(filters))
 			if err != nil {
 				return err
 			}

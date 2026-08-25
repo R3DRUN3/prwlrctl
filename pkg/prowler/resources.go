@@ -1,10 +1,10 @@
-package client
+package prowler
 
 import (
 	"context"
 	"net/url"
 
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 )
 
 // GetResource retrieves a single resource by ID.

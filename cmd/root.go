@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/r3drun3/prwlrctl/internal/client"
 	"github.com/r3drun3/prwlrctl/internal/config"
-	"github.com/r3drun3/prwlrctl/internal/jsonapi"
+	"github.com/r3drun3/prwlrctl/pkg/prowler"
+	"github.com/r3drun3/prwlrctl/pkg/prowler/jsonapi"
 	"github.com/spf13/cobra"
 )
 
@@ -54,9 +54,9 @@ func init() {
 
 // newClient resolves config precedence (flags > env > file) and builds a
 // ready-to-use API client for a command.
-func newClient() *client.Client {
+func newClient() *prowler.Client {
 	cfg := config.Resolve(flagBaseURL, flagAPIKey, flagToken)
-	return client.New(cfg.BaseURL, cfg.APIKey, cfg.AccessToken, flagTimeout)
+	return prowler.New(cfg.BaseURL, cfg.APIKey, cfg.AccessToken, flagTimeout)
 }
 
 // cmdContext gives every command a bounded context so hung requests never
