@@ -40,7 +40,7 @@ Then launch the container:
 docker run --rm \
 --network host \
 --env-file path-to-your-.env-file \
-ghcr.io/r3drun3/prwlrctl:0.3.0 \
+ghcr.io/r3drun3/prwlrctl:0.4.0 \
 providers list -o json
 ```  
 
@@ -95,6 +95,120 @@ scan_id=$(prwlrctl scans launch --provider "$PROVIDER_ID" -q)
 prwlrctl scans get "$scan_id" -o json | jq .  
 ```  
 
+
+## Import package
+Starting with `v0.4.0`, prwlrctl can also be imported as a Go package and used as a reusable Prowler API client in other Go projects.  
+
+The reusable client is available under `github.com/r3drun3/prwlrctl/pkg/prowler`.  
+
+Install it with:
+
+```console
+go get github.com/r3drun3/prwlrctl@v0.4.0 (or latest, or the version you want)
+```  
+
+
+You can then create a Prowler client and use the exported API methods directly, see the example below:  
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"time"
+
+	"github.com/joho/godotenv"
+
+	"github.com/r3drun3/prwlrctl/pkg/prowler" // imported here
+)
+
+func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Printf("warning: could not load .env: %v", err)
+	}
+
+	baseURL := os.Getenv("PROWLER_BASE_URL")
+	apiKey := os.Getenv("PROWLER_API_KEY")
+	accessToken := os.Getenv("PROWLER_ACCESS_TOKEN")
+
+	if baseURL == "" {
+		log.Fatal("PROWLER_BASE_URL is required")
+	}
+
+	if apiKey == "" && accessToken == "" {
+		log.Fatal("either PROWLER_API_KEY or PROWLER_ACCESS_TOKEN is required")
+	}
+
+	// Create a reusable Prowler client.
+	prowlerClient := prowler.New(
+		baseURL,
+		apiKey,
+		accessToken,
+		30*time.Second,
+	)
+
+	ctx := context.Background()
+
+	// ------------------------------------------------------------
+	// 1. Server health check
+	// ------------------------------------------------------------
+
+	fmt.Println("Checking Prowler server health...")
+
+	health, err := prowlerClient.Health(ctx)
+	if err != nil {
+		log.Fatalf("health check failed: %v", err)
+	}
+
+	fmt.Printf("✓ Prowler is healthy\n")
+	fmt.Printf("  Status:      %s\n", health.Status)
+	fmt.Printf("  Version:     %s\n", health.Version)
+	fmt.Printf("  Release ID:  %s\n", health.ReleaseID)
+	fmt.Printf("  Service ID:  %s\n", health.ServiceID)
+	fmt.Printf("  Description: %s\n", health.Description)
+
+	// ------------------------------------------------------------
+	// 2. Retrieve providers
+	// ------------------------------------------------------------
+
+	fmt.Println("\nRetrieving providers...")
+
+	// No filters, first page, 100 items.
+	providersDocument, err := prowlerClient.ListProviders(
+		ctx,
+		nil,
+		1,
+		100,
+	)
+	if err != nil {
+		log.Fatalf("failed to retrieve providers: %v", err)
+	}
+
+	providers, err := providersDocument.Many()
+	if err != nil {
+		log.Fatalf("failed to decode providers: %v", err)
+	}
+
+	fmt.Printf("✓ Found %d providers\n\n", len(providers))
+
+	for _, provider := range providers {
+		fmt.Printf("Provider:\n")
+		fmt.Printf("  ID:      %s\n", provider.ID)
+		fmt.Printf("  Type:    %s\n", provider.Type)
+		fmt.Printf("  Alias:   %s\n", provider.Str("alias"))
+		fmt.Printf("  Provider: %s\n", provider.Str("provider"))
+
+		if connected, ok := provider.NestedBool("connection", "connected"); ok {
+			fmt.Printf("  Connected: %t\n", connected)
+		}
+
+		fmt.Println()
+	}
+}
+```
 
 
 ## Local development
